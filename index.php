@@ -19,7 +19,7 @@
 <body>
     <div class="container">
         <h2>体质测试管理系统登录</h2>
-        <form action="login.php" method="post">
+        <form method="post" id="loginForm">
             <div class="role-select">
                 <label>选择身份：</label>
                 <input type="radio" id="student" name="role" value="student" checked>
@@ -31,8 +31,43 @@
             <input type="text" id="username" name="username" required>
             <label for="password">密码：</label>
             <input type="password" id="password" name="password" required>
-            <button type="submit">登录</button>
+            <button type="submit" onclick="return toLogin()">登录</button>
         </form>
     </div>
+
+<script>
+    function toLogin() {
+        var role = document.querySelector('input[name="role"]:checked').value;
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+
+        if (!username || !password) {
+            alert("请输入用户名和密码！");
+            return false;
+        }
+
+        var currentUrl = window.location.origin + window.location.pathname;
+        var url = currentUrl + (role === "admin" ? "admin/toLogin.php" : "student/toLogin.php");
+
+        fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: "username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = role === "admin" ? "admin/index.php" : "student/index.php";
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(() => {
+            alert("登录请求失败，请稍后重试！");
+        });
+        return false;
+    }
+</script>
+
 </body>
 </html>

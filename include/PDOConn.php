@@ -3,7 +3,7 @@
 $dbcon=null;
 $dbms="mysql";
 $host="localhost";
-$database="physical_test";
+$database="pe_test_system";
 $userName="root";
 $passWord="123456";
 $dsn="{$dbms}:host={$host};dbname={$database};charset=utf8";
